@@ -2,23 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Employer;
 
-
-class Job extends Model{
+class Job extends Model
+{
     use HasFactory;
+
+    // Table name
     protected $table = 'job_listings';
 
+    // Mass assignable fields
     protected $fillable = [
         'title',
         'company',
         'location',
+        'employer_id', // allow assigning employer
     ];
 
-    public function employer(){
+    // Relationship with Employer
+    public function employer()
+    {
         return $this->belongsTo(Employer::class);
     }
 }
