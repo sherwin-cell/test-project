@@ -29,30 +29,47 @@
             </div>
           </div>
 
-          <!-- RIGHT SIDE: Notifications + Profile -->
-          <div class="hidden md:flex items-center md:ml-6">
-            <button type="button"
-              class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-              <span class="absolute -inset-1.5"></span>
-              <span class="sr-only">View notifications</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
-                aria-hidden="true" class="size-6">
-                <path
-                  d="M14.857 17.0 82a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                  stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </button>
-
-            <!-- Profile dropdown -->
-            <el-dropdown class="relative ml-3">
-              <button
-                class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+          <!-- RIGHT SIDE: Auth Links + Profile -->
+          <div class="hidden md:flex items-center md:ml-6 gap-4">
+            @auth
+              <!-- Notifications -->
+              <button type="button"
+                class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                 <span class="absolute -inset-1.5"></span>
-                <span class="sr-only">Open user menu</span>
-                <img src="https://i.pinimg.com/736x/e4/95/6c/e4956ce7e9f1a054f1c580eb218ff35d.jpg" alt=""
-                  class="size-8 rounded-full outline -outline-offset-1 outline-white/10" />
+                <span class="sr-only">View notifications</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
+                  aria-hidden="true" class="size-6">
+                  <path
+                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
               </button>
-            </el-dropdown>
+
+              <!-- Profile dropdown -->
+              <div class="relative ml-3 group">
+                <button
+                  class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                  <span class="absolute -inset-1.5"></span>
+                  <span class="sr-only">Open user menu</span>
+                  <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=6366f1&background=e0e7ff"
+                    alt="{{ Auth::user()->name }}"
+                    class="size-8 rounded-full outline -outline-offset-1 outline-white/10" />
+                </button>
+                
+                <!-- Dropdown menu -->
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                  <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                  <form method="POST" action="{{ route('logout') }}" class="block">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+                  </form>
+                </div>
+              </div>
+            @else
+              <!-- Guest links -->
+              <a href="{{ route('login') }}" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Login</a>
+              <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">Register</a>
+            @endauth
           </div>
 
           <!-- MOBILE MENU BUTTON -->
@@ -80,46 +97,47 @@
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
           <a href="/" aria-current="page"
             class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">Home</a>
-          <a href="about"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">About</a>
-          <a href="contact"
+          <a href="/jobs"
+            class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Jobs</a>
+          <a href="/contact"
             class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Contact</a>
 
           <div class="border-t border-white/10 pt-4 pb-3">
-            <div class="flex items-center px-5">
-              <div class="shrink-0">
-                <img src="https://i.pinimg.com/736x/e4/95/6c/e4956ce7e9f1a054f1c580eb218ff35d.jpg" alt=""
-                  class="size-10 rounded-full outline -outline-offset-1 outline-white/10" />
+            @auth
+              <div class="flex items-center px-5">
+                <div class="shrink-0">
+                  <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=6366f1&background=e0e7ff" alt="{{ Auth::user()->name }}"
+                    class="size-10 rounded-full outline -outline-offset-1 outline-white/10" />
+                </div>
+                <div class="ml-3">
+                  <div class="text-base/5 font-medium text-white">{{ Auth::user()->name }}</div>
+                  <div class="text-sm font-medium text-gray-400">{{ Auth::user()->email }}</div>
+                </div>
               </div>
-              <div class="ml-3">
-                <div class="text-base/5 font-medium text-white">Sherwin</div>
-                <div class="text-sm font-medium text-gray-400">sherwin@example.com</div>
+              <div class="mt-3 space-y-1 px-2">
+                <a href="{{ route('dashboard') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Dashboard</a>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button type="submit" class="w-full text-left rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Logout</button>
+                </form>
               </div>
-              <button type="button"
-                class="relative ml-auto shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-                <span class="absolute -inset-1.5"></span>
-                <span class="sr-only">View notifications</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
-                  aria-hidden="true" class="size-6">
-                  <path
-                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                    stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
-            </div>
+            @else
+              <div class="space-y-1 px-2">
+                <a href="{{ route('login') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Login</a>
+                <a href="{{ route('register') }}" class="block rounded-md px-3 py-2 text-base font-medium text-indigo-400 hover:bg-white/5 hover:text-indigo-300">Register</a>
+              </div>
+            @endauth
           </div>
       </el-disclosure>
     </nav>
-
     <header class="relative bg-white shadow-sm">
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
         <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ $heading }}</h1>
 
-        <x-button href="/jobs/create">
-          Create Job
-        </x-button>
-
-
+        {{-- Show Create Job button only on jobs index page --}}
+        @if(request()->routeIs('jobs.index'))
+          <x-button href="{{ route('jobs.create') }}">Create Job</x-button>
+        @endif
       </div>
     </header>
     <main>

@@ -3,80 +3,70 @@
         Edit Job: {{ $job['title'] }}
     </x-slot:heading>
 
-    <form method="POST" action="/jobs/{{ $job['id'] }}">
-        @csrf
-        @method('PATCH')
-        <div class="space-y-12">
-            <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">Job Information</h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">Update the details of the job listing.</p>
+    <div class="max-w-2xl">
+        <form method="POST" action="/jobs/{{ $job['id'] }}">
+            @csrf
+            @method('PATCH')
+            <div class="space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Job Information</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">Update the details of the job listing.</p>
 
-                <!-- Job Title -->
-                <div class="sm:col-span-4">
-                    <label for="title" class="block text-sm font-medium text-gray-700">
-                        Job Title
-                    </label>
-                    <div class="mt-1">
-                        <input type="text" name="title" id="title" value="{{ $job['title'] }}"
-                            placeholder="Frontend Developer"
-                            class="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 text-base text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <div class="mt-8 space-y-6">
+                        <!-- Job Title -->
+                        <div>
+                            <x-form-label for="title">Job Title</x-form-label>
+                            <div class="mt-2">
+                                <x-form-input name="title" placeholder="Frontend Developer" value="{{ $job['title'] }}" />
+                            </div>
+                        </div>
+
+                        <!-- Company -->
+                        <div>
+                            <x-form-label for="company">Company</x-form-label>
+                            <div class="mt-2">
+                                <x-form-input name="company" placeholder="Acme Corp" value="{{ $job['company'] }}" />
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div>
+                            <x-form-label for="location">Location</x-form-label>
+                            <div class="mt-2">
+                                <x-form-input name="location" placeholder="New York, NY" value="{{ $job['location'] }}" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Company -->
-                <div class="sm:col-span-4">
-                    <label for="company" class="block text-sm font-medium text-gray-700">
-                        Company
-                    </label>
-                    <div class="mt-1">
-                        <input type="text" name="company" id="company" value="{{ $job['company'] }}"
-                            placeholder="Acme Corp"
-                            class="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 text-base text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-                    </div>
-                </div>
-
-                <!-- Location -->
-                <div class="sm:col-span-4">
-                    <label for="location" class="block text-sm font-medium text-gray-700">
-                        Location
-                    </label>
-                    <div class="mt-1">
-                        <input type="text" name="location" id="location" value="{{ $job['location'] }}"
-                            placeholder="New York, NY"
-                            class="block w-full rounded-md border border-gray-300 bg-white py-2 px-3 text-base text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-                    </div>
-                </div>
+                <!-- Form Errors -->
+                <x-form-error />
             </div>
-        </div>
 
-        <div class="flex items-center justify-between gap-x-6 mt-6">
-            <!-- Left side: Delete -->
-            <form method="POST" action="/jobs/{{ $job->id }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500">
-                    Delete
+            <div class="flex items-center justify-between gap-x-6 mt-8">
+                <!-- Delete Button -->
+                <button type="button" onclick="if(confirm('Are you sure you want to delete this job?')) { document.getElementById('deleteForm').submit(); }"
+                    class="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 transition duration-200">
+                    Delete Job
                 </button>
-            </form>
 
-            <!-- Right side: Update + Cancel -->
-            <div class="flex items-center gap-x-4">
-                <!-- Update -->
-                <form method="POST" action="/jobs/{{ $job->id }}">
-                    @csrf
-                    @method('PATCH')
+                <!-- Update and Cancel Buttons -->
+                <div class="flex items-center gap-x-4">
                     <button type="submit"
-                        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
-                        Update
+                        class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition duration-200">
+                        Update Job
                     </button>
-                </form>
-
-                <!-- Cancel -->
-                <a href="/jobs" class="text-sm font-semibold leading-6 text-gray-900">
-                    Cancel
-                </a>
+                    <a href="/jobs" class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
+                        Cancel
+                    </a>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+
+        <!-- Hidden Delete Form -->
+        <form id="deleteForm" method="POST" action="/jobs/{{ $job->id }}" style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
+    </div>
 </x-layout>

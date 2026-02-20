@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Job;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -30,16 +31,17 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'company' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
+        $validated = $request->validate([
+            'title' => 'required',
+            'company' => 'required',
+            'location' => 'required',
         ]);
 
-        $job = Job::create($validatedData);
+        $validated['employer_id'] = Auth::id();
 
-        return redirect('/jobs/' . $job->id)
-            ->with('success', 'Job created successfully!');
+        Job::create($validated);
+
+        return redirect('/jobs')->with('success', 'Job created successfully!');
     }
 
     public function edit(Job $job)
